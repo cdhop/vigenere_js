@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vigenere Cipher</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+  	<div class="col-md-12">
+          <form id="vigenere_form">
+            <fieldset>
+              <legend>Vigenere Cipher</legend>
+              <div class="panel panel-primary">
+                <div class="panel-heading">Plain Text</div> 
+                <div class="panel-body">
+                  <textarea class="form-control" name="plain_text" id="plain_text"></textarea>
+                </div>
+              </div>
+              <div class="panel panel-primary">
+                <div class="panel-heading">Key</div>
+                <div class="panel-body">
+                  <div class="input-group">
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-danger" id="encrypt_button">Encrypt</button>
+                    </span>
+                    <input type="text" class="form-control" name="key" id="key"/>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-primary" id="decrypt_button">Decrypt</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-primary">
+                <div class="panel-heading" style="background-color: #d9534f">Cipher Text</div> 
+                <div class="panel-body">
+                  <textarea class="form-control" name="cipher_text" id="cipher_text"></textarea>
+                </div>
+              </div>
+	      <div class="panel panel-primary">
+                <div class="panel-heading">Key Length Analysis</div>
+                <div class="panel-body">
+	          <p><div class="input-group">
+                    <span class="input-group-addon">Sequence Size</span>
+		    <input type="number" min="2" max="10" step="1" value="4" class="form-control integer-field" name="sequence_size" id="sequence_size"/>
+		  </div></p>
+		  <p><div class="input-group">
+                    <span class="input-group-addon">Minimum Occurance Count</span>
+		    <input type="number" min="2" max="10" step="1" value="4" class="form-control integer-field" name="min_occurance_count" id="min_occurance_count"/>
+		  </div></p>
+		  <p><div>
+	            <button type="button" class="btn btn-primary btn-block" id="keylength_button">Analyze</button>
+		  </div></p>
+		  <div id="keylength_analysis"></div>
+		</div>
+	      </div>
+	      <div class="panel panel-primary">
+               <div class="panel-heading">Key Analysis</div>
+	       <div class="panel-body">
+                 <p><div class="input-group">
+                   <span class="input-group-addon">Key Length</span>
+		   <input type="number" min="3" max="20" step="1" class="form-control integer-field" name="key_length" id="key_length"/>
+		 </div></p>
+		 <p><div>
+		   <button type="button" class="btn btn-primary btn-block" id="key_button">Analyze</button>
+		 </div></p>
+		 <div id="key_analysis"></div>
+               </div>
+	      </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vigenere.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#plain_text').change(function() {
+          $('#plain_text').val($('#plain_text').val().toLowerCase());
+        });
+
+        $('#key').change(function() {
+          $('#key').val($('#key').val().toLowerCase());
+        });
+
+        $('#cipher_text').change(function() {
+          $('#cipher_text').val($('#cipher_text').val().toUpperCase());
+        });
+
+        $("#encrypt_button").click(function() {
+          var plain_text = $("#plain_text").val();
+          var key = $("#key").val();
+
+          try {
+            if(plain_text == '') throw("Plain Text is empty!");
+            if(key == '') throw("Key is empty!");
+
+            var mask = generate_mask(plain_text, key);
+            var cipher_text = encrypt(plain_text, mask);
+            $("#cipher_text").val(cipher_text);
+          }
+          catch(err) {
+            alert(err);
+          }
+        
+        });
+
+        $("#decrypt_button").click(function() {
+          var cipher_text = $("#cipher_text").val();
+          var key = $("#key").val();
+
+          try {
+            if(cipher_text == '') throw("Cipher Text is empty!");
+            if(key == '') throw("Key is empty!");
+
+            var mask = generate_mask(cipher_text, key);
+            var plain_text = decrypt(cipher_text, mask);
+            $("#plain_text").val(plain_text);  
+          }
+          catch(err) {
+            alert(err); 
+          }
+        });
+
+	$("#keylength_button").click(function() {
+          try {
+            var cipher_text = $("#cipher_text").val();
+	    var sequence_size = parseInt($("#sequence_size").val());
+	    var min_occurance_count = parseInt($("#min_occurance_count").val());  
+
+	    if(cipher_text == '') throw("Cipher Text is empty!");
+
+	    var alpha_string = generate_alpha_string(cipher_text);
+	    var sequences = get_sequences(alpha_string, sequence_size);
+	    var occurances = get_occurances(sequences);
+	    var filtered_occurances = filter_occurances(occurances, min_occurance_count);
+	    console.log(JSON.stringify(filtered_occurances));
+	    $("#keylength_analysis").html(build_keylength_results(filtered_occurances));
+	  } 
+          catch(err) {
+            alert(err);
+	  }	  
+	});
+
+	$("#key_button").click(function() {
+	  try {
+            var cipher_text = $("#cipher_text").val();
+	    var key_length = parseInt($("#key_length").val());
+	    var position_results = [];
+
+	    if(cipher_text == '') throw("Cipher Text is empty!");
+
+	    var alpha_string = generate_alpha_string(cipher_text);
+	    var position_array = generate_position_array(alpha_string, key_length);
+	    console.log(position_array); 
+	    for(var i=0; i < position_array.length; i++) {
+              position_results.push(analyze_position(position_array[i]));
+            } 
+	    console.log(position_results);
+	    $("#key_analysis").html(build_key_results(position_results));
+	  }
+	  catch(err) {
+            alert(err);
+	  }
+	});
+      });
+
+      function build_keylength_results(occurances) {
+        var results = "";
+        var occurance_distances = get_occurance_distances(occurances);
+
+        results += "<table class='table'>";
+        results += "<tr><td>Sequence</td><td>Locations</td><td>Distances</td><td>GCD</td></tr>";
+
+        for(key in occurances) {
+          var gcd = array_gcd(occurance_distances[key]);
+          results += "<tr><td>" + key + "</td>" +
+	                 "<td>" + occurances[key] + "</td>" +
+	                 "<td>" + occurance_distances[key] + "</td>" +
+			 "<td>" + gcd + "</td><tr>";
+        }
+
+        results += "</table>";
+
+        return results;
+      }
+
+      function build_key_results(position_results) {
+        var results = "";
+
+        results += "<table class='table'>";
+	results += "<tr><td>Position</td><td>Scores</td></tr>";
+
+	for(var i=0; i < position_results.length; i++) {
+          results += "<tr><td>" + (i+1) + "</td><td>";
+	  for(var result in position_results[i]) {
+		  results += result + " - " + position_results[i][result] + "<br/>";
+          }
+	  results += "</td></tr>";
+	}
+	
+
+	return results;
+      }
+ 
+    </script>
+  </body>
+</html>
