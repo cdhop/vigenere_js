@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Frequency Analysis</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+  	<div class="col-md-12">
+          <form id="vigenere_form">
+            <fieldset>
+              <legend>Frequency Analysis</legend>
+              <div class="panel panel-primary">
+                <div class="panel-heading">Text</div> 
+                <div class="panel-body">
+                  <textarea class="form-control" name="text" id="text"></textarea>
+                </div>
+              </div>
+	      <div class="panel panel-primary">
+                <div class="panel-heading">Occurences</div>
+                <div class="panel-body">
+                  <div id="occurences"></div>
+		</div>
+	      </div>
+	      <div class="panel panel-primary">
+               <div class="panel-heading">Graphs</div>
+	       <div class="panel-body">
+                 <div id="count_graph">
+                 </div>
+               </div>
+	      </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/frequency.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#text').change(function() {
+          var char_set = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          var char_counts = character_count($('#text').val().toUpperCase(), char_set);
+          console.log(char_counts);
+          $("#occurences").html(build_occurences(char_counts));
+        });
+      });
+
+      function build_occurences(char_counts) {
+        var results = '';
+        var total_characters = total_character_count(char_counts);
+        console.log(total_characters);
+
+        results += "<table class='table'>";
+	results += "<tr><th>Character</th><th>Count</th><th>%</th></tr>";
+
+        for(var key in char_counts) {
+          percentage = ((char_counts[key] / total_characters) * 100).toFixed(2);
+          results += "<tr><td>" + key + "</td><td>" + char_counts[key] + "</td><td>" + percentage + "</td></tr>";
+        }
+
+        results += "</table>";
+
+        return results;
+      }
+
+    </script>
+  </body>
+</html>

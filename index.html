@@ -207,6 +207,33 @@
 
 	return results;
       }
+
+      function build_key_results_improved(position_results) {
+        var results = "";
+
+        results += "<table class='table'>";
+
+        results += "<tr>";
+        for(var i=1; i <= position_results.length; i++) {
+          results += "<th>" + i + "</th>";;
+        }
+        results += "</tr>";
+
+        results += "<tr>";
+        for(var i=0; i < position_results.length; i++) {
+          results += "<td>";
+          for(var result in position_results[i]) {
+            results += result + " - " + position_results[i][result] + "<br/>";
+          }
+          results += "</td>";
+        }
+        results += "</tr>";
+
+        results += "</table>";
+
+        return results;
+
+      }
  
     </script>
   </body>
