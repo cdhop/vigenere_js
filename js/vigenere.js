@@ -229,7 +229,7 @@ function analyze_position(position_string) {
 
   for(var i=0; i < character_set.length; i++) {
     shift_string = caesar_shift(position_string, i);
-    position_results[character_set[i]] = get_chi_squared(shift_string);
+    position_results[character_set[i]] = parseFloat(get_chi_squared(shift_string)).toFixed(2);
   }
 
   return position_results;
