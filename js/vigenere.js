@@ -234,3 +234,13 @@ function analyze_position(position_string) {
 
   return position_results;
 }
+
+function build_position_array(position_hash) {
+  var results = new Array();
+
+  for(var key in position_hash) {
+    results.push(new Array(key, parseFloat(position_hash[key])));
+  }
+
+  return results;
+}

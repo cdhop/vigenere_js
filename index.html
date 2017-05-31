@@ -65,8 +65,10 @@
                    <span class="input-group-addon">Key Length</span>
 		   <input type="number" min="3" max="20" step="1" value="5" class="form-control integer-field" name="key_length" id="key_length"/>
 		 </div></p>
-		 <p><div>
-		   <button type="button" class="btn btn-primary btn-block" id="key_button">Analyze</button>
+		 <p><div class="btn-group btn-group-justified">
+		   <div class="btn-group"><button type="button" class="btn btn-primary" id="analysis_button">Analyze</button></div>
+		   <div class="btn-group"><button type="button" class="btn btn-primary" id="columns_button">Column View</button></div>
+		   <div class="btn-group"><button type="button" class="btn btn-primary" id="summary_button">Summary</button></div>
 		 </div></p>
 		 <div id="key_analysis"></div>
                </div>
@@ -148,7 +150,7 @@
 	  }	  
 	});
 
-	$("#key_button").click(function() {
+	$("#analysis_button").click(function() {
 	  try {
             var cipher_text = $("#cipher_text").val();
 	    var key_length = parseInt($("#key_length").val());
@@ -163,12 +165,59 @@
               position_results.push(analyze_position(position_array[i]));
             } 
 	    console.log(position_results);
+
 	    $("#key_analysis").html(build_key_results(position_results));
 	  }
 	  catch(err) {
             alert(err);
 	  }
 	});
+
+        $("#columns_button").click(function() {
+          try { 
+            var cipher_text = $("#cipher_text").val();
+            var key_length = parseInt($("#key_length").val());
+            var position_results = [];
+            
+            if(cipher_text == '') throw("Cipher Text is empty!");
+            
+            var alpha_string = generate_alpha_string(cipher_text);
+            var position_array = generate_position_array(alpha_string, key_length);
+            console.log(position_array); 
+            for(var i=0; i < position_array.length; i++) {
+              position_results.push(analyze_position(position_array[i]));
+            } 
+            console.log(position_results);
+            
+            $("#key_analysis").html(build_column_results(position_results));
+          }
+          catch(err) {
+            alert(err);
+          }
+        });
+
+        $("#summary_button").click(function() {
+          try { 
+            var cipher_text = $("#cipher_text").val();
+            var key_length = parseInt($("#key_length").val());
+            var position_results = [];
+            
+            if(cipher_text == '') throw("Cipher Text is empty!");
+            
+            var alpha_string = generate_alpha_string(cipher_text);
+            var position_array = generate_position_array(alpha_string, key_length);
+            console.log(position_array); 
+            for(var i=0; i < position_array.length; i++) {
+              position_results.push(analyze_position(position_array[i]));
+            } 
+            console.log(position_results);
+            
+            $("#key_analysis").html(build_key_summary(position_results));
+          }
+          catch(err) {
+            alert(err);
+          }
+        });
       });
 
       function build_keylength_results(occurances) {
@@ -208,7 +257,7 @@
 	return results;
       }
 
-      function build_key_results_improved(position_results) {
+      function build_column_results(position_results) {
         var results = "";
 
         results += "<table class='table'>";
@@ -232,7 +281,29 @@
         results += "</table>";
 
         return results;
+      }
 
+      function build_key_summary(position_results) {
+        var results = "";
+
+        results += "<table class='table'>";
+        results += "<tr><td>Position</td><td>Scores</td></tr>";
+
+        for(var i=0; i < position_results.length; i++) {
+          position_array = build_position_array(position_results[i]);
+          position_array.sort(function(a, b) {
+            return a[1] - b[1];
+          });
+        
+          results += "<tr><td>" + (i+1) + "</td><td>";
+          for(var j=0; j < 5; j++) {
+                  results += position_array[j][0] + " (" + position_array[j][1] + ") ";
+          }
+          results += "</td></tr>";
+        }
+        results += "</table>";
+
+        return results;
       }
  
     </script>
