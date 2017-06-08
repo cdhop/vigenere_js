@@ -32,3 +32,36 @@ function is_inset(character, char_set) {
 
   return result;
 }
+
+function build_frequency_chart(char_counts, context) {
+  var characters = [];
+  var counts = []; 
+
+  for(key in char_counts) {
+    characters.push(key);
+    counts.push(char_counts[key]);
+  } 
+  console.log(characters);
+  console.log(counts);
+
+  var feq_chart = new Chart( context, {
+    type: 'bar',
+    data: {
+      labels: characters,
+      datasets: [{
+        label: 'Frequency Counts',
+        data: counts,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true
+          }
+        }]
+      }
+    }
+  });
+}

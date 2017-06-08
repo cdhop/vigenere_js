@@ -28,10 +28,9 @@
 		</div>
 	      </div>
 	      <div class="panel panel-primary">
-               <div class="panel-heading">Graphs</div>
+               <div class="panel-heading">Frequency Graph</div>
 	       <div class="panel-body">
-                 <div id="count_graph">
-                 </div>
+                 <canvas id="freq_chart" width="400" height="400"></canvas>
                </div>
 	      </div>
             </fieldset>
@@ -42,13 +41,18 @@
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/frequency.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/Chart.bundle.min.js"></script>
     <script>
       $(document).ready(function() {
         $('#text').change(function() {
           var char_set = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
           var char_counts = character_count($('#text').val().toUpperCase(), char_set);
+          var context = document.getElementById("freq_chart").getContext('2d');
+
           console.log(char_counts);
           $("#occurences").html(build_occurences(char_counts));
+          build_frequency_chart(char_counts, context);
         });
       });
 
