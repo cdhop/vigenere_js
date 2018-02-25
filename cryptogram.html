@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cryptogram Tool</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+  	<div class="col-md-12">
+            <fieldset>
+              <legend>Cryptogram Tool</legend>
+              <div class="panel panel-primary">
+                <div class="panel-heading" style="background-color: #c55">Original Text</div> 
+                <div class="panel-body">
+                  <textarea class="form-control" id="original_text"></textarea>
+                </div>
+              </div>
+	      <div class="panel panel-primary">
+                <div class="panel-heading" style="background-color: #5c5">Key</div>
+	        <div class="panel-body">
+	          <p>Explanation: The first character in the 'Original' text field will be replaced by the first character in the 'Replacement' field, the secord character in the 'Original' text field will be replaced by the secord character in the Replacement' field, and so on and so forth.</p>
+		  <p><div class="input-group">
+                    <span class="input-group-addon" style="background-color: #c55; color: #fff">Original</span>
+		    <input class="form-control" id="original_characters"/>
+		  </div></p>
+		  <p><div class="input-group">
+                    <span class="input-group-addon" style="background-color: #55c; color: #fff">Replacement</span>
+		    <input class="form-control" id="replacement_characters"/>
+		  </div></p>
+		  <p><div>
+		    <button type="button" class="btn btn-block btn-success" id="replace_button">Replace</button>
+		  </div></p>
+                </div>
+	      </div>
+	      <div class="panel panel-primary">
+	        <div class="panel-heading" style="background-color: #55c">Replaced Text</div>
+		<div class="panel-body">
+		  <textarea class="form-control" id="replaced_text"></textarea>
+                </div>
+	      </div>
+	      <div class="panel panel-primary">
+	        <div class="panel-heading">Frequency Analysis</div>
+		<div class="panel-body">
+	          <p><div>
+	            <button type="button" class="btn btn-block btn-primary" id="freq_analysis_button">Analyze Original Text</button>
+		  </div></p>
+		  <div id="frequency_analysis"></div>
+		</div>
+	      </div>
+            </fieldset>
+        </div>
+      </div>
+    </div>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/frequency.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/Chart.bundle.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#original_text').change(function() {
+          $('#original_text').val($('#original_text').val().toLowerCase());         
+        });
+
+        $('#original_characters').change(function() {
+          $('#original_characters').val($('#original_characters').val().toLowerCase());         
+        });
+
+        $('#replacement_characters').change(function() {
+          $('#replacement_characters').val($('#replacement_characters').val().toUpperCase());         
+        });
+
+	$('#replace_button').click(function() {
+          var original_text = $('#original_text').val();
+	  var original_characters = $('#original_characters').val();
+	  var replacement_characters = $('#replacement_characters').val();
+          var replaced_text = '';
+
+          if( original_characters.length == replacement_characters.length) {
+            for(var ot_pos = 0; ot_pos < original_text.length; ot_pos++) {
+              oc_pos = original_characters.indexOf(original_text[ot_pos]);
+	      if(oc_pos > -1) {
+                replaced_text += replacement_characters[oc_pos];
+	      } else {
+                replaced_text += original_text[ot_pos];
+	      }
+            }
+	    $('#replaced_text').val(replaced_text);
+          } else {
+            alert("Original key characters and Replacement key characters quantity mismatch");
+	  }
+	});
+
+	$('#freq_analysis_button').click(function() {
+          var char_set = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	  var char_counts = character_count($('#original_text').val().toUpperCase(), char_set); 
+          $('#frequency_analysis').html(build_frequency_analysis(char_counts));
+	});
+      });
+
+      function build_frequency_analysis(char_counts) {
+        var results = '';
+        var total_characters = total_character_count(char_counts);
+
+        results += "<table class='table'>";
+	results += "<tr><th>Character</th><th>Count</th><th>%</th></tr>";
+
+        for(var key in char_counts) {
+          percentage = ((char_counts[key] / total_characters) * 100).toFixed(2);
+          results += "<tr><td>" + key + "</td><td>" + char_counts[key] + "</td><td>" + percentage + "</td></tr>";
+        }
+
+        results += "</table>";
+
+        return results; 
+      }
+    </script>
+  </body>
+</html>
