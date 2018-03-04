@@ -47,9 +47,38 @@
 	        <div class="panel-heading">Frequency Analysis</div>
 		<div class="panel-body">
 	          <p><div>
-	            <button type="button" class="btn btn-block btn-primary" id="freq_analysis_button">Analyze Original Text</button>
+	            <button type="button" class="btn btn-block btn-primary" id="freq_analysis_button">Analyze</button>
 		  </div></p>
 		  <div id="frequency_analysis"></div>
+		</div>
+	      </div>
+	      <div class="panel panel-primary">
+	        <div class="panel-heading">Repetition Analysis</div>
+		<div class="panel-body">
+		  <div class="row">
+		    <div class="col-lg-4">
+		      <div class="input-group">
+			<span class="input-group-addon">Max Size</span>
+			<input class="form-control" type="number" id="rep_max_size" max="10" min="3" value="5" step="1"/>
+		      </div>
+		    </div>
+		    <div class="col-lg-4">
+		      <div class="input-group">
+			<span class="input-group-addon">Min Size</span>
+			<input class="form-control" type="number" id="rep_min_size" max="10" min="2" value="3" step="1"/>
+		      </div>
+		    </div>
+		    <div class="col-lg-4">
+		      <div class="input-group">
+			<span class="input-group-addon">Min Count</span>
+			<input class="form-control" type="number" id="rep_min_count" max="10" min="2" value="3" step="1"/>
+		      </div>
+		    </div>
+		  </div>
+	          <p><div>
+	            <button type="button" class="btn btn-block btn-primary" id="repetition_analysis_button">Analyze</button>
+		  </div></p>
+		  <div id="repetition_analysis"></div>
 		</div>
 	      </div>
             </fieldset>
@@ -59,20 +88,21 @@
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/frequency.js"></script>
+    <script src="js/cryptograms.js"></script>
     <script src="js/Chart.min.js"></script>
     <script src="js/Chart.bundle.min.js"></script>
     <script>
       $(document).ready(function() {
         $('#original_text').change(function() {
-          $('#original_text').val($('#original_text').val().toLowerCase());         
+          $('#original_text').val($('#original_text').val().toUpperCase());         
         });
 
         $('#original_characters').change(function() {
-          $('#original_characters').val($('#original_characters').val().toLowerCase());         
+          $('#original_characters').val($('#original_characters').val().toUpperCase());         
         });
 
         $('#replacement_characters').change(function() {
-          $('#replacement_characters').val($('#replacement_characters').val().toUpperCase());         
+          $('#replacement_characters').val($('#replacement_characters').val().toLowerCase());         
         });
 
 	$('#replace_button').click(function() {
@@ -101,6 +131,41 @@
 	  var char_counts = character_count($('#original_text').val().toUpperCase(), char_set); 
           $('#frequency_analysis').html(build_frequency_analysis(char_counts));
 	});
+
+	$('#rep_max_size').change(function() {
+          var rep_max_size = $('#rep_max_size').val();
+	  var rep_min_size = $('#rep_min_size').val();
+
+	  // rep_max_size can never be less than rep_min_size
+	  if(rep_max_size < rep_min_size) $('#rep_max_size').val(rep_min_size);
+	});
+
+	$('#rep_min_size').change(function() {
+          var rep_max_size = $('#rep_max_size').val();
+	  var rep_min_size = $('#rep_min_size').val();
+
+	  // rep_min_size can never be greater than rep_max_size
+          if(rep_min_size > rep_max_size) $('#rep_min_size').val(rep_max_size);
+	});
+
+	$('#repetition_analysis_button').click(function() {
+          var sequence_counts = [];
+          var max_size = $('#rep_max_size').val();
+	  var min_size = $('#rep_min_size').val();
+	  var min_count = $('#rep_min_count').val();
+          var char_set = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          var original_text = $('#original_text').val().toUpperCase();
+
+          for(var seq_size = max_size; seq_size >= min_size; seq_size--) {
+            var sequences = build_sequences(original_text, char_set, seq_size);
+	    var counts = filter_minimum_sequence_counts(count_sequences(sequences),min_count);
+            if(Object.keys(counts).length > 0 ) {
+              sequence_counts = Object.assign({}, sequence_counts, counts); 
+	    }
+	  }
+	  console.log(sequence_counts);
+	  $('#repetition_analysis').html(build_repetition_analysis(sequence_counts)); 
+	});
       });
 
       function build_frequency_analysis(char_counts) {
@@ -119,6 +184,23 @@
 
         return results; 
       }
+
+      function build_repetition_analysis(sequence_counts) {
+        var results = '';
+
+        results += "<table class='table'>";
+	results += "<tr><th>Size</th><th>Text</th><th>Count</th></tr>";
+
+        for(var key in sequence_counts) {
+          var seq_size = key.length;	
+          results += "<tr><td>" + seq_size + "</td><td>" + key + "</td><td>" + sequence_counts[key] + "</td></tr>";
+        }
+
+        results += "</table>";
+
+        return results; 
+      }
+
     </script>
   </body>
 </html>
