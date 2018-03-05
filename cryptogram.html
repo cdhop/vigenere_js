@@ -10,78 +10,92 @@
 
   <body>
     <div class="container">
+      <h3>Cryptogram Tool</h3>
       <div class="row">
-  	<div class="col-md-12">
-            <fieldset>
-              <legend>Cryptogram Tool</legend>
+          <div class="col-md-6">
               <div class="panel panel-primary">
                 <div class="panel-heading" style="background-color: #c55">Original Text</div> 
                 <div class="panel-body">
                   <textarea class="form-control" id="original_text"></textarea>
                 </div>
               </div>
-	      <div class="panel panel-primary">
+              <div class="panel panel-primary">
                 <div class="panel-heading" style="background-color: #5c5">Key</div>
-	        <div class="panel-body">
-	          <p>Explanation: The first character in the 'Original' text field will be replaced by the first character in the 'Replacement' field, the secord character in the 'Original' text field will be replaced by the secord character in the Replacement' field, and so on and so forth.</p>
-		  <p><div class="input-group">
+                <div class="panel-body">
+                  <p>Explanation: The first character in the 'Original' text field will be replaced by the first character in the 'Replacement' field, the secord character in the 'Original' text field will be replaced by the secord character in the Replacement' field, and so on and so forth.</p>
+                  <p><div class="input-group">
                     <span class="input-group-addon" style="background-color: #c55; color: #fff">Original</span>
-		    <input class="form-control" id="original_characters"/>
-		  </div></p>
-		  <p><div class="input-group">
+                    <input class="form-control" id="original_characters"/>
+                  </div></p>
+                  <p><div class="input-group">
                     <span class="input-group-addon" style="background-color: #55c; color: #fff">Replacement</span>
-		    <input class="form-control" id="replacement_characters"/>
-		  </div></p>
-		  <p><div>
-		    <button type="button" class="btn btn-block btn-success" id="replace_button">Replace</button>
-		  </div></p>
+                    <input class="form-control" id="replacement_characters"/>
+                  </div></p>
+                  <p><div>
+                    <button type="button" class="btn btn-block btn-success" id="replace_button">Replace</button>
+                  </div></p>
                 </div>
-	      </div>
-	      <div class="panel panel-primary">
-	        <div class="panel-heading" style="background-color: #55c">Replaced Text</div>
-		<div class="panel-body">
-		  <textarea class="form-control" id="replaced_text"></textarea>
+              </div>
+              <div class="panel panel-primary">
+                <div class="panel-heading" style="background-color: #55c">Replaced Text</div>
+                <div class="panel-body">
+                  <textarea class="form-control" id="replaced_text"></textarea>
                 </div>
-	      </div>
-	      <div class="panel panel-primary">
-	        <div class="panel-heading">Frequency Analysis</div>
-		<div class="panel-body">
-	          <p><div>
-	            <button type="button" class="btn btn-block btn-primary" id="freq_analysis_button">Analyze</button>
-		  </div></p>
-		  <div id="frequency_analysis"></div>
-		</div>
-	      </div>
-	      <div class="panel panel-primary">
-	        <div class="panel-heading">Repetition Analysis</div>
-		<div class="panel-body">
-		  <div class="row">
-		    <div class="col-lg-4">
-		      <div class="input-group">
-			<span class="input-group-addon">Max Size</span>
-			<input class="form-control" type="number" id="rep_max_size" max="10" min="3" value="5" step="1"/>
-		      </div>
-		    </div>
-		    <div class="col-lg-4">
-		      <div class="input-group">
-			<span class="input-group-addon">Min Size</span>
-			<input class="form-control" type="number" id="rep_min_size" max="10" min="2" value="3" step="1"/>
-		      </div>
-		    </div>
-		    <div class="col-lg-4">
-		      <div class="input-group">
-			<span class="input-group-addon">Min Count</span>
-			<input class="form-control" type="number" id="rep_min_count" max="10" min="2" value="3" step="1"/>
-		      </div>
-		    </div>
-		  </div>
-	          <p><div>
-	            <button type="button" class="btn btn-block btn-primary" id="repetition_analysis_button">Analyze</button>
-		  </div></p>
-		  <div id="repetition_analysis"></div>
-		</div>
-	      </div>
-            </fieldset>
+              </div>
+        </div>
+          <div class="col-md-6">
+            <ul class="nav nav-pills">
+              <li class="active">
+                <a href="#freq_analysis" data-toggle="tab">Frequency Analysis</a>
+              </li>
+              <li>
+                <a href="#rep_analysis" data-toggle="tab">Repetition Analysis</a>
+              </li>
+            </ul>
+
+            <div class="tab-content clearfix">
+              <div class="tab-pane active" id="freq_analysis">
+                <div class="panel panel-primary">
+                  <div class="panel-body">
+                    <p><div>
+                      <button type="button" class="btn btn-block btn-primary" id="freq_analysis_button">Analyze</button>
+                    </div></p>
+                    <div id="frequency_analysis"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="rep_analysis">
+                <div class="panel panel-primary">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-lg-4">
+                        <div class="input-group">
+                          <span class="input-group-addon">Max Size</span>
+                          <input class="form-control" type="number" id="rep_max_size" max="10" min="3" value="5" step="1"/>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="input-group">
+                          <span class="input-group-addon">Min Size</span>
+                          <input class="form-control" type="number" id="rep_min_size" max="10" min="2" value="3" step="1"/>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="input-group">
+                          <span class="input-group-addon">Min Count</span>
+                          <input class="form-control" type="number" id="rep_min_count" max="10" min="2" value="3" step="1"/>
+                        </div>
+                      </div>
+                    </div>
+                    <p><div>
+                      <button type="button" class="btn btn-block btn-primary" id="repetition_analysis_button">Analyze</button>
+                    </div></p>
+                    <div id="repetition_analysis"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -105,67 +119,67 @@
           $('#replacement_characters').val($('#replacement_characters').val().toLowerCase());         
         });
 
-	$('#replace_button').click(function() {
+        $('#replace_button').click(function() {
           var original_text = $('#original_text').val();
-	  var original_characters = $('#original_characters').val();
-	  var replacement_characters = $('#replacement_characters').val();
+          var original_characters = $('#original_characters').val();
+          var replacement_characters = $('#replacement_characters').val();
           var replaced_text = '';
 
           if( original_characters.length == replacement_characters.length) {
             for(var ot_pos = 0; ot_pos < original_text.length; ot_pos++) {
               oc_pos = original_characters.indexOf(original_text[ot_pos]);
-	      if(oc_pos > -1) {
+              if(oc_pos > -1) {
                 replaced_text += replacement_characters[oc_pos];
-	      } else {
+              } else {
                 replaced_text += original_text[ot_pos];
-	      }
+              }
             }
-	    $('#replaced_text').val(replaced_text);
+            $('#replaced_text').val(replaced_text);
           } else {
             alert("Original key characters and Replacement key characters quantity mismatch");
-	  }
-	});
+          }
+        });
 
-	$('#freq_analysis_button').click(function() {
+        $('#freq_analysis_button').click(function() {
           var char_set = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	  var char_counts = character_count($('#original_text').val().toUpperCase(), char_set); 
+          var char_counts = character_count($('#original_text').val().toUpperCase(), char_set); 
           $('#frequency_analysis').html(build_frequency_analysis(char_counts));
-	});
+        });
 
-	$('#rep_max_size').change(function() {
+        $('#rep_max_size').change(function() {
           var rep_max_size = $('#rep_max_size').val();
-	  var rep_min_size = $('#rep_min_size').val();
+          var rep_min_size = $('#rep_min_size').val();
 
-	  // rep_max_size can never be less than rep_min_size
-	  if(rep_max_size < rep_min_size) $('#rep_max_size').val(rep_min_size);
-	});
+          // rep_max_size can never be less than rep_min_size
+          if(rep_max_size < rep_min_size) $('#rep_max_size').val(rep_min_size);
+        });
 
-	$('#rep_min_size').change(function() {
+        $('#rep_min_size').change(function() {
           var rep_max_size = $('#rep_max_size').val();
-	  var rep_min_size = $('#rep_min_size').val();
+          var rep_min_size = $('#rep_min_size').val();
 
-	  // rep_min_size can never be greater than rep_max_size
+          // rep_min_size can never be greater than rep_max_size
           if(rep_min_size > rep_max_size) $('#rep_min_size').val(rep_max_size);
-	});
+        });
 
-	$('#repetition_analysis_button').click(function() {
+        $('#repetition_analysis_button').click(function() {
           var sequence_counts = [];
           var max_size = $('#rep_max_size').val();
-	  var min_size = $('#rep_min_size').val();
-	  var min_count = $('#rep_min_count').val();
+          var min_size = $('#rep_min_size').val();
+          var min_count = $('#rep_min_count').val();
           var char_set = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
           var original_text = $('#original_text').val().toUpperCase();
 
           for(var seq_size = max_size; seq_size >= min_size; seq_size--) {
             var sequences = build_sequences(original_text, char_set, seq_size);
-	    var counts = filter_minimum_sequence_counts(count_sequences(sequences),min_count);
+            var counts = filter_minimum_sequence_counts(count_sequences(sequences),min_count);
             if(Object.keys(counts).length > 0 ) {
               sequence_counts = Object.assign({}, sequence_counts, counts); 
-	    }
-	  }
-	  console.log(sequence_counts);
-	  $('#repetition_analysis').html(build_repetition_analysis(sequence_counts)); 
-	});
+            }
+          }
+          console.log(sequence_counts);
+          $('#repetition_analysis').html(build_repetition_analysis(sequence_counts)); 
+        });
       });
 
       function build_frequency_analysis(char_counts) {
@@ -173,7 +187,7 @@
         var total_characters = total_character_count(char_counts);
 
         results += "<table class='table'>";
-	results += "<tr><th>Character</th><th>Count</th><th>%</th></tr>";
+        results += "<tr><th>Character</th><th>Count</th><th>%</th></tr>";
 
         for(var key in char_counts) {
           percentage = ((char_counts[key] / total_characters) * 100).toFixed(2);
@@ -189,10 +203,10 @@
         var results = '';
 
         results += "<table class='table'>";
-	results += "<tr><th>Size</th><th>Text</th><th>Count</th></tr>";
+        results += "<tr><th>Size</th><th>Text</th><th>Count</th></tr>";
 
         for(var key in sequence_counts) {
-          var seq_size = key.length;	
+          var seq_size = key.length;        
           results += "<tr><td>" + seq_size + "</td><td>" + key + "</td><td>" + sequence_counts[key] + "</td></tr>";
         }
 
