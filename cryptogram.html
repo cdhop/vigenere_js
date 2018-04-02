@@ -135,6 +135,7 @@
               }
             }
             $('#replaced_text').val(replaced_text);
+            color_used_frequency_analysis(original_characters);
           } else {
             alert("Original key characters and Replacement key characters quantity mismatch");
           }
@@ -191,12 +192,25 @@
 
         for(var key in char_counts) {
           percentage = ((char_counts[key] / total_characters) * 100).toFixed(2);
-          results += "<tr><td>" + key + "</td><td>" + char_counts[key] + "</td><td>" + percentage + "</td></tr>";
+          results += "<tr class='fa-row' id='" + key + "'><td>" + key + "</td><td>" + char_counts[key] + "</td><td>" + percentage + "</td></tr>";
         }
 
         results += "</table>";
 
         return results; 
+      }
+
+      function color_used_frequency_analysis(used_characters) {
+        console.log("inside color_used_frequencey_analysis");
+        console.log("used_characters: " + used_characters);
+        $('.fa-row').css('background-color','#fff');
+
+        for(var i = 0; i < used_characters.length; i++) {
+          var row_id = "#" + used_characters[i];
+          console.log(row_id);
+
+          $(row_id).css('background-color','#ccc'); 
+        }
       }
 
       function build_repetition_analysis(sequence_counts) {
